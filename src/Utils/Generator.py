@@ -98,7 +98,7 @@ def generate_financial_dataset(n):
 def generate_metadata_st(data):
     # Generate metadata from input
     metadata = SingleTableMetadata()
-    metadata.detect_from_dataframe(data=df)
+    metadata.detect_from_dataframe(data)
 
     # Correct metadata sdtypes
     metadata.update_column(
