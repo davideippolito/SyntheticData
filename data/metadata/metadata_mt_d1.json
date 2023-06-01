@@ -1,0 +1,70 @@
+{
+    "tables": {
+        "d1": {
+            "columns": {
+                "Customer_ID": {
+                    "sdtype": "id",
+                    "regex_format": "\\d{21}"
+                },
+                "Account_Number": {
+                    "sdtype": "numerical"
+                },
+                "Account_Type": {
+                    "sdtype": "categorical"
+                },
+                "Balance": {
+                    "sdtype": "numerical",
+                    "computer_representation": "Float"
+                },
+                "Currency": {
+                    "sdtype": "categorical"
+                },
+                "Last_Transaction Date": {
+                    "sdtype": "categorical"
+                },
+                "Last_Transaction Amount": {
+                    "sdtype": "numerical"
+                },
+                "Tot_Transaction_Amount": {
+                    "sdtype": "numerical"
+                },
+                "Branch": {
+                    "sdtype": "categorical"
+                },
+                "Region": {
+                    "sdtype": "categorical"
+                },
+                "Address": {
+                    "sdtype": "categorical"
+                },
+                "Phone": {
+                    "sdtype": "categorical"
+                },
+                "Email": {
+                    "sdtype": "categorical"
+                },
+                "Employer": {
+                    "sdtype": "categorical"
+                },
+                "Employment_Type": {
+                    "sdtype": "categorical"
+                },
+                "Credit_Score": {
+                    "sdtype": "numerical"
+                },
+                "Loan_Amount": {
+                    "sdtype": "numerical"
+                },
+                "Loan_Term": {
+                    "sdtype": "categorical"
+                },
+                "Interest_Rate": {
+                    "sdtype": "numerical"
+                }
+            },
+            "primary_key": "Customer_ID"
+        }
+    },
+    "relationships": [],
+    "METADATA_SPEC_VERSION": "MULTI_TABLE_V1"
+}
