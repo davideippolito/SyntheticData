@@ -3,10 +3,8 @@
 # --------------------------------------------------------------------------- #
 
 import pandas as pd
-
 from faker import Faker
 import random
-
 from sdv.metadata import SingleTableMetadata
 from sdv.metadata import MultiTableMetadata
 
@@ -36,7 +34,6 @@ loan_terms = ['None', '12 months', '24 months', '36 months', '60 months', '120 m
 def generate_banking_dataset(n):
     fake = Faker('it_IT')
     dataset = []
-
     for _ in range(n):
         data = {
             'Customer_ID': fake.random_number(digits=21),
@@ -62,7 +59,6 @@ def generate_banking_dataset(n):
             'Interest_Rate': round(random.uniform(1, 15), 2)
         }
         dataset.append(data)
-
     return dataset
 
 # --------------------------------------------------------------------------- #
@@ -70,7 +66,6 @@ def generate_banking_dataset(n):
 def generate_financial_dataset(n):
     fake = Faker()
     dataset = []
-
     for _ in range(n):
         data = {
             'Account_Number': fake.random_number(digits=10),
@@ -95,7 +90,6 @@ def generate_financial_dataset(n):
             'Interest_Rate': round(random.uniform(1, 15), 2)
         }
         dataset.append(data)
-
     return dataset
 
 
@@ -107,20 +101,17 @@ def generate_metadata_st(data):
     # Generate metadata from input
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data)
-
     # Correct metadata sd types
     metadata.update_column(
         column_name='Customer_ID',
         sdtype='id',
         regex_format=r'\d{21}'
     )
-
     # Primary Keys: These keys identify every row of the table. 
     # They must be unique to the entire table and other tables may refer to them.
     metadata.set_primary_key(
         column_name='Customer_ID'
     )
-
     # Return metadata
     return metadata
 
@@ -130,14 +121,12 @@ def generate_metadata_mt(data):
     # Add the DataFrame to the dictionary
     datasets = {}
     datasets['d1'] = data
-
     # Generate metadata from input
     metadata = MultiTableMetadata()
     metadata.detect_table_from_dataframe(
         table_name='d1',
         data=data
     )
-
     # Correct metadata sd types
     metadata.update_column(
         table_name='d1',
@@ -145,14 +134,12 @@ def generate_metadata_mt(data):
         sdtype='id',
         regex_format=r'\d{21}'
     )
-
     # Primary Keys: These keys identify every row of the table. 
     # They must be unique to the entire table and other tables may refer to them.
     metadata.set_primary_key(
         table_name='d1',
         column_name='Customer_ID'
     )
-
     # Return metadata
     return metadata
 
