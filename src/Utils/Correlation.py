@@ -9,7 +9,7 @@ import random
 #                                  FUNCTIONS                                  #
 # --------------------------------------------------------------------------- #
 
-def correlate_balance_employment_type(data):
+def dependency_balance_employment_type(data):
     for _ in data:
         if _['Employment_Type'] == 'Tempo Pieno':
             _['Balance'] *= 1
@@ -20,7 +20,7 @@ def correlate_balance_employment_type(data):
         # elif _['Employment_Type'] == 'Libero Professionista':
         #     _['Balance'] *= random.choice([0.2, 0.5, 1.5, 2, 2.5, 10])
 
-def correlate_balance_region(data):
+def dependency_region_balance(data):
     for _ in data:
         if _['Region'] == 'Lombardia':
             _['Balance'] *= 2
@@ -33,7 +33,7 @@ def correlate_balance_region(data):
         elif _['Region'] in ['Sardegna', 'Sicilia']:
             _['Balance'] *= 0.1
 
-def correlate_tot_transaction_amount_credit_score(data):
+def dependency_tot_transaction_amount_credit_score(data):
     for _ in data:
         if _['Tot_Transaction_Amount'] >= 50000:
             _['Credit_Score'] *= 1.2
@@ -47,7 +47,7 @@ def correlate_tot_transaction_amount_credit_score(data):
 #                                    OLDER                                    #
 # --------------------------------------------------------------------------- #
 
-def correlate_income_age_range(data):
+def dependency_income_age_range(data):
     for _ in data:
         if _['Age Range'] == '65':
             _['Income'] = _['Income'] * 2

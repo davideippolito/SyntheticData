@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_region_balance_comparison(RD, SD):
+def plot_dependency_region_balance(RD, SD):
     # Get unique regions and sort them in descending order
     regions = np.unique(RD['Region'])
     regions = sorted(regions, reverse=True)
@@ -39,7 +39,37 @@ def plot_region_balance_comparison(RD, SD):
     # Set labels and title
     ax.set_xlabel('Total Balance')
     ax.set_ylabel('Region')
-    ax.set_title('Total Balance Comparison - RD vs SD')
+    ax.set_title('Region / Balance - RD vs SD')
+
+    # Add legend
+    ax.legend()
+
+    # Show the plot
+    plt.show()
+
+
+def plot_dependency_employement_type_balance(RD, SD, employment_type):
+    # Filter data based on the given employment type
+    RD_filtered = RD[RD['Employment_Type'] == employment_type]
+    SD_filtered = SD[SD['Employment_Type'] == employment_type]
+
+    # Get balance values for RD and SD
+    RD_balance = RD_filtered['Balance']
+    SD_balance = SD_filtered['Balance']
+
+    # Create subplots
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Plot RD balance
+    ax.hist(RD_balance, bins=30, color='blue', alpha=0.5, label='Real Data')
+
+    # Plot SD balance
+    ax.hist(SD_balance, bins=30, color='red', alpha=0.5, label='Synthetic Data')
+
+    # Set labels and title
+    ax.set_xlabel('Balance')
+    ax.set_ylabel('Frequency')
+    ax.set_title(f'{employment_type} / Balance - Real Data vs Synthetic Data')
 
     # Add legend
     ax.legend()
