@@ -24,7 +24,7 @@ account_types = ['Conto Corrente', 'Conto Deposito']
 
 employment_types = ['Tempo Pieno', 'Tempo Parziale', 'Libero Professionista']
 
-loan_terms = ['None', '12 months', '24 months', '36 months', '60 months', '120 months']
+loan_terms = ['12 months', '24 months', '36 months', '60 months', '120 months']
 
 
 # --------------------------------------------------------------------------- #
@@ -46,16 +46,16 @@ def generate_banking_dataset(n):
             'Last_Transaction Date': fake.date_between(start_date='-1y', end_date='today').strftime('%Y-%m-%d'),
             'Last_Transaction Amount': round(random.uniform(-10000, 10000), 2),
             'Tot_Transaction_Amount': round(random.uniform(0, 100000), 2),
-            'Branch': fake.city(),
+            'Branch': str(fake.city()),
             'Region': random.choice(regions),
-            'Address': fake.address().replace('\n', ', '),
-            'Phone': '+0039' + str(fake.random_number(digits=9)),
-            'Email': fake.email(),
-            'Employer': fake.company(),
+            'Address': str(fake.address().replace('\n', ', ')),
+            'Phone': '+0039 ' + str(fake.random_number(digits=9)),
+            'Email': str(fake.email()),
+            'Employer': str(fake.company()),
             'Employment_Type': random.choice(employment_types),
             'Credit_Score': random.randint(300, 850),
             'Loan_Amount': round(random.uniform(1000, 100000), 2),
-            'Loan_Term': random.choice(loan_terms),
+            'Loan_Term': str(random.choice(loan_terms)),
             'Interest_Rate': round(random.uniform(1, 15), 2)
         }
         dataset.append(data)

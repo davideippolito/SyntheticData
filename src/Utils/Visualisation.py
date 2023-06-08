@@ -2,77 +2,70 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_dependency_region_balance(RD, SD):
-    # Get unique regions and sort them in descending order
-    regions = np.unique(RD['Region'])
-    regions = sorted(regions, reverse=True)
 
+def plot_dependency_region_balance(dataframes):
+    # Get unique regions and sort them in descending order
+    regions = np.unique(dataframes['RD']['Region'])
+    regions = sorted(regions, reverse=True)
     # Get the number of regions
     num_regions = len(regions)
-
     # Set the width of each bar
     bar_width = 0.35
-
     # Set the spacing between bars
     spacing = 0.2
-
     # Calculate the center positions of the bars
     bar_positions = np.arange(num_regions)
-
-    # Calculate the total balance for each region in RD and SD
-    RD_total_balance = RD.groupby('Region')['Balance'].sum()
-    SD_total_balance = SD.groupby('Region')['Balance'].sum()
-
     # Create subplots
     fig, ax = plt.subplots(figsize=(10, 6))
-
-    # Plot RD total balance by region (inverted y-axis)
-    ax.barh(bar_positions, RD_total_balance[regions], height=bar_width, color='blue', alpha=0.5, label='RD')
-
-    # Plot SD total balance by region, overlapping RD bars (inverted y-axis)
-    ax.barh(bar_positions, SD_total_balance[regions], height=bar_width, color='red', alpha=0.5, label='SD')
-
+    # Define colors for each DataFrame
+    colors = ['blue', 'red', 'yellow']
+    # Loop over the dataframes and plot the total balance by region
+    for idx, (label, dataframe) in enumerate(dataframes.items()):
+        total_balance = dataframe.groupby('Region')['Balance'].sum()
+        # Plot total balance with a different color for each DataFrame
+        ax.barh(bar_positions, total_balance[regions], height=bar_width, alpha=0.5, color=colors[idx], label=label)
     # Set y-axis tick positions and labels
     ax.set_yticks(bar_positions)
     ax.set_yticklabels(regions)
-
     # Set labels and title
     ax.set_xlabel('Total Balance')
     ax.set_ylabel('Region')
-    ax.set_title('Region / Balance - RD vs SD')
-
+    ax.set_title('Region / Balance')
     # Add legend
     ax.legend()
-
     # Show the plot
     plt.show()
 
 
-def plot_dependency_employement_type_balance(RD, SD, employment_type):
-    # Filter data based on the given employment type
-    RD_filtered = RD[RD['Employment_Type'] == employment_type]
-    SD_filtered = SD[SD['Employment_Type'] == employment_type]
-
-    # Get balance values for RD and SD
-    RD_balance = RD_filtered['Balance']
-    SD_balance = SD_filtered['Balance']
-
+def plot_dependency_employment_type_balance(dataframes, employment_types):
+    # Define colors for each DataFrame
+    colors = ['blue', 'red', 'yellow']
     # Create subplots
-    fig, ax = plt.subplots(figsize=(10, 6))
-
-    # Plot RD balance
-    ax.hist(RD_balance, bins=30, color='blue', alpha=0.5, label='Real Data')
-
-    # Plot SD balance
-    ax.hist(SD_balance, bins=30, color='red', alpha=0.5, label='Synthetic Data')
-
-    # Set labels and title
-    ax.set_xlabel('Balance')
-    ax.set_ylabel('Frequency')
-    ax.set_title(f'{employment_type} / Balance - Real Data vs Synthetic Data')
-
-    # Add legend
-    ax.legend()
-
+    fig, axs = plt.subplots(len(employment_types), 1, figsize=(10, 6 * len(employment_types)), sharex=True)
+    # Iterate over the employment types
+    for idx, employment_type in enumerate(employment_types):
+        ax = axs[idx]
+        # Iterate over the dataframes
+        for i, dataframe in enumerate(dataframes):
+            # Filter data based on the given employment type
+            filtered_data = dataframe[dataframe['Employment_Type'] == employment_type]
+            # Get balance values
+            balance = filtered_data['Balance']
+            # Plot balance with a different color for each DataFrame
+            ax.hist(balance, bins=30, alpha=0.5, color=colors[i], label=f'DataFrame {i+1}')
+        # Set labels and title for each subplot
+        ax.set_xlabel('Balance')
+        ax.set_ylabel('Frequency')
+        ax.set_title(f'{employment_type} / Balance')
+        # Add legend to the last subplot
+        if idx == len(employment_types) - 1:
+            ax.legend()
+    # Adjust the spacing between subplots
+    plt.tight_layout()
     # Show the plot
     plt.show()
+
+
+
+
+
