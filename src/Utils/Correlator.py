@@ -14,7 +14,7 @@ def dependency_balance_employment_type(data):
         if _['Employment_Type'] == 'Tempo Pieno':
             _['Balance'] *= 1
         elif _['Employment_Type'] == 'Tempo Parziale':
-            _['Balance'] *= 0.8
+            _['Balance'] *= 0.5
         elif _['Employment_Type'] == 'Libero Professionista':
             _['Balance'] *= 1.5
         # elif _['Employment_Type'] == 'Libero Professionista':
@@ -36,11 +36,11 @@ def dependency_region_balance(data):
 def dependency_tot_transaction_amount_credit_score(data):
     for _ in data:
         if _['Tot_Transaction_Amount'] >= 50000:
-            _['Credit_Score'] *= 1.2
+            _['Credit_Score'] *= 2
         elif 10000 <= _['Tot_Transaction_Amount'] <= 50000:
             _['Credit_Score'] *= 1
         elif _['Tot_Transaction_Amount'] <= 10000:
-            _['Credit_Score'] *= 0.8
+            _['Credit_Score'] *= 0.2
 
 
 # --------------------------------------------------------------------------- #
@@ -59,3 +59,5 @@ def dependency_income_age_range(data):
             _['Income'] = _['Income'] * 1
         elif _['Age Range'] == '25':
             _['Income'] = _['Income'] * 0.5
+            
+# --------------------------------------------------------------------------- #

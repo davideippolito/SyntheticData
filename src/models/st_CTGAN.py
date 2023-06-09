@@ -1,4 +1,13 @@
+# --------------------------------------------------------------------------- #
+#                                   IMPORT                                    #
+# --------------------------------------------------------------------------- #
+
 from sdv.single_table import CTGANSynthesizer
+
+
+# --------------------------------------------------------------------------- #
+#                                    MODEL                                    #
+# --------------------------------------------------------------------------- #
 
 def CTGAN(RD, metadata_st):
     synthesizer = CTGANSynthesizer(
@@ -13,3 +22,5 @@ def CTGAN(RD, metadata_st):
     synthetic_data = synthesizer.sample(1)    
     # Generate synthetic data using the SDV model:
     return synthetic_data
+
+# --------------------------------------------------------------------------- #
