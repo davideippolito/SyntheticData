@@ -4,7 +4,6 @@
 
 import random
 
-
 # --------------------------------------------------------------------------- #
 #                                  FUNCTIONS                                  #
 # --------------------------------------------------------------------------- #
@@ -20,7 +19,7 @@ def dependency_balance_employment_type(data):
         # elif _['Employment_Type'] == 'Libero Professionista':
         #     _['Balance'] *= random.choice([0.2, 0.5, 1.5, 2, 2.5, 10])
 
-def dependency_region_balance(data):
+def dependency_balance_region(data):
     for _ in data:
         if _['Region'] == 'Lombardia':
             _['Balance'] *= 2
@@ -42,7 +41,6 @@ def dependency_tot_transaction_amount_credit_score(data):
         elif _['Tot_Transaction_Amount'] <= 10000:
             _['Credit_Score'] *= 0.2
 
-
 # --------------------------------------------------------------------------- #
 #                                    OLDER                                    #
 # --------------------------------------------------------------------------- #
@@ -50,9 +48,9 @@ def dependency_tot_transaction_amount_credit_score(data):
 def dependency_income_age_range(data):
     for _ in data:
         if _['Age Range'] == '65':
-            _['Income'] = _['Income'] * 2
-        elif _['Age Range'] == '55':
             _['Income'] = _['Income'] * 2.5
+        elif _['Age Range'] == '55':
+            _['Income'] = _['Income'] * 2
         elif _['Age Range'] == '45':
             _['Income'] = _['Income'] * 1.5
         elif _['Age Range'] == '35':
