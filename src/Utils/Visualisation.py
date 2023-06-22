@@ -6,7 +6,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # --------------------------------------------------------------------------- #
 #                                  FUNCTIONS                                  #
 # --------------------------------------------------------------------------- #
@@ -70,34 +69,5 @@ def plot_dependency_employment_type_balance(dataframes, employment_types):
     plt.tight_layout()
     # Show the plot
     plt.show()
-
-
-def compare_real_and_synthetic(real_data, synthetic_data):
-    # Calculate summary statistics for real data
-    real_stats = real_data.describe()
-    # Calculate summary statistics for synthetic data
-    synthetic_stats = synthetic_data.describe()
-    # Create a comparison DataFrame
-    comparison_df = pd.DataFrame(columns=['Statistic', 'Real Data', 'Synthetic Data'])
-    # Iterate over columns and populate comparison DataFrame
-    for column in real_data.columns:
-        real_values = real_stats[column]
-        synthetic_values = synthetic_stats[column]
-        comparison_df = comparison_df.append({'Statistic': 'Count',
-                                              'Real Data': real_values['count'],
-                                              'Synthetic Data': synthetic_values['count']},
-                                             ignore_index=True)
-
-        comparison_df = comparison_df.append({'Statistic': 'Mean',
-                                              'Real Data': real_values['mean'],
-                                              'Synthetic Data': synthetic_values['mean']},
-                                             ignore_index=True)
-
-        comparison_df = comparison_df.append({'Statistic': 'Std',
-                                              'Real Data': real_values['std'],
-                                              'Synthetic Data': synthetic_values['std']},
-                                             ignore_index=True)
-        # Add more summary statistics as needed
-    return comparison_df
 
 # --------------------------------------------------------------------------- #
