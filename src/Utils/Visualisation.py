@@ -2,10 +2,10 @@
 #                                   IMPORT                                    #
 # --------------------------------------------------------------------------- #
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
-
 
 # --------------------------------------------------------------------------- #
 #                                  FUNCTIONS                                  #
@@ -47,7 +47,7 @@ def plot_dependency_region_balance(dataframes):
 
 def plot_dependency_employment_type_balance(dataframes, employment_types):
     # Create subplots
-    fig, axs = plt.subplots(len(employment_types), 1, figsize=(10, 6 * len(employment_types)), sharex=True)
+    fig, axs = plt.subplots(1, len(employment_types), figsize=(6 * len(employment_types), 6), sharey=True)
     # Iterate over the employment types
     for idx, employment_type in enumerate(employment_types):
         ax = axs[idx]
@@ -58,10 +58,9 @@ def plot_dependency_employment_type_balance(dataframes, employment_types):
             # Get balance values
             balance = filtered_data['Balance']
             # Plot balance with a different label for each DataFrame
-            ax.hist(balance, bins=30, alpha=0.5, label=f'DataFrame {i+1}')
+            sns.kdeplot(balance, ax=ax, label=f'DataFrame {i+1}')
         # Set labels and title for each subplot
         ax.set_xlabel('Balance')
-        ax.set_ylabel('Frequency')
         ax.set_title(f'{employment_type} / Balance')
         # Add legend to the last subplot
         if idx == len(employment_types) - 1:
@@ -72,32 +71,16 @@ def plot_dependency_employment_type_balance(dataframes, employment_types):
     plt.show()
 
 
-def compare_real_and_synthetic(real_data, synthetic_data):
-    # Calculate summary statistics for real data
-    real_stats = real_data.describe()
-    # Calculate summary statistics for synthetic data
-    synthetic_stats = synthetic_data.describe()
-    # Create a comparison DataFrame
-    comparison_df = pd.DataFrame(columns=['Statistic', 'Real Data', 'Synthetic Data'])
-    # Iterate over columns and populate comparison DataFrame
-    for column in real_data.columns:
-        real_values = real_stats[column]
-        synthetic_values = synthetic_stats[column]
-        comparison_df = comparison_df.append({'Statistic': 'Count',
-                                              'Real Data': real_values['count'],
-                                              'Synthetic Data': synthetic_values['count']},
-                                             ignore_index=True)
-
-        comparison_df = comparison_df.append({'Statistic': 'Mean',
-                                              'Real Data': real_values['mean'],
-                                              'Synthetic Data': synthetic_values['mean']},
-                                             ignore_index=True)
-
-        comparison_df = comparison_df.append({'Statistic': 'Std',
-                                              'Real Data': real_values['std'],
-                                              'Synthetic Data': synthetic_values['std']},
-                                             ignore_index=True)
-        # Add more summary statistics as needed
-    return comparison_df
+def plot_kernel_density(dataframes, variable):
+    plt.figure(figsize=(10, 6))
+    
+    for i, dataframe in enumerate(dataframes):
+        sns.kdeplot(dataframe[variable], label=f"DataFrame {i+1}")
+    
+    plt.title("Kernel Density Plot - " + variable)
+    plt.xlabel(variable)
+    plt.ylabel("Density")
+    plt.legend()
+    plt.show()
 
 # --------------------------------------------------------------------------- #

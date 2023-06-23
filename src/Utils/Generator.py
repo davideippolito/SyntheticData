@@ -8,51 +8,45 @@ import random
 from sdv.metadata import SingleTableMetadata
 from sdv.metadata import MultiTableMetadata
 
-
 # --------------------------------------------------------------------------- #
 #                                  VARIABLES                                  #
 # --------------------------------------------------------------------------- #
 
 regions = [
-        'Abruzzo', 'Basilicata', 'Calabria', 'Campania', 'Emilia-Romagna',
-        'Friuli-Venezia Giulia', 'Lazio', 'Liguria', 'Lombardia', 'Marche',
-        'Molise', 'Piemonte', 'Puglia', 'Sardegna', 'Sicilia', 'Toscana',
-        'Trentino-Alto Adige', 'Umbria', 'Valle d\'Aosta', 'Veneto'
-    ]
-
+            'Abruzzo', 'Basilicata', 'Calabria', 'Campania', 'Emilia-Romagna',
+            'Friuli-Venezia Giulia', 'Lazio', 'Liguria', 'Lombardia', 'Marche',
+            'Molise', 'Piemonte', 'Puglia', 'Sardegna', 'Sicilia', 'Toscana',
+            'Trentino-Alto Adige', 'Umbria', 'Valle d\'Aosta', 'Veneto'
+]
 account_types = ['Conto Corrente', 'Conto Deposito']
-
 employment_types = ['Tempo Pieno', 'Tempo Parziale', 'Libero Professionista']
-
 loan_terms = ['12 months', '24 months', '36 months', '60 months', '120 months']
-
 
 # --------------------------------------------------------------------------- #
 #                                  FUNCTIONS                                  #
 # --------------------------------------------------------------------------- #
 
-#                                   DATASETS                                  #
-
 def generate_banking_dataset(n):
     fake = Faker('it_IT')
     dataset = []
+
     for _ in range(n):
         data = {
             'Customer_ID': fake.random_number(digits=21),
             'SSN': str(fake.ssn()),
-            'Account_Number': fake.random_number(digits=10),
+            'Account_Number': fake.random_number(digits=21),
             'Account_Type': str(random.choice(account_types)),
             'Balance': round(random.uniform(0, 1000000), 2),
             'Currency': 'EUR',
             'Last_Transaction_Date': fake.date_between(start_date='-1y', end_date='today').strftime('%Y-%m-%d'),
             'Last_Transaction_Amount': round(random.uniform(-10000, 10000), 2),
             'Tot_Transaction_Amount': round(random.uniform(0, 100000), 2),
-            'Branch': str(fake.city()), # implicit type for metadata
+            #'Branch': str(fake.city()), # implicit type for metadata
             'Region': str(random.choice(regions)),
             'Address': str(fake.address().replace('\n', ', ')),
             'Email': str(fake.email()),
             'Phone': '+0039 ' + str(fake.random_number(digits=9)),
-            'Company': str(fake.company()), # implicit type for metadata
+            #'Company': str(fake.company()), # implicit type for metadata
             'Employment_Type': str(random.choice(employment_types)),
             'Credit_Score': random.randint(300, 850),
             'Loan_Amount': round(random.uniform(1000, 100000), 2),
@@ -60,23 +54,32 @@ def generate_banking_dataset(n):
             'Interest_Rate': round(random.uniform(1, 15), 2)
         }
         dataset.append(data)
+
     return dataset
 
-#                                   METADATA                                  #
+# --------------------------------------------------------------------------- #
 
 def generate_banking_metadata_st(data):
     # Generate metadata from input
     metadata = SingleTableMetadata()
     metadata.detect_from_dataframe(data)
-    # Generate metadata from input
-    metadata = MultiTableMetadata()
-    metadata.detect_table_from_dataframe(data=data)
+
     # Correct id type
     metadata.update_column(
         column_name='Customer_ID',
         sdtype='id',
         regex_format=r'\d{21}'
     )
+    metadata.update_column(
+        column_name='Account_Number',
+        sdtype='id',
+        regex_format=r'\d{10}'
+    )
+    metadata.update_column(
+        column_name='SSN',
+        sdtype='id',
+    )
+
     # Primary Keys: These keys identify every row of the table. 
     # They must be unique to the entire table and other tables may refer to them.
     metadata.set_primary_key(
@@ -88,6 +91,7 @@ def generate_banking_metadata_st(data):
     metadata.add_alternate_keys(
         column_names=['SSN']
     )
+
     # Personal Identifiable Information (PII)
     metadata.update_column(
         column_name='Address',
@@ -104,6 +108,7 @@ def generate_banking_metadata_st(data):
         sdtype='phone_number',
         pii=True
     )
+    
     # Correct metadata sd types
     metadata.update_column(
         column_name='Last_Transaction_Date',
@@ -126,19 +131,22 @@ def generate_banking_metadata_st(data):
         column_name='Loan_Term',
         sdtype='categorical'
     )
-    # Return metadata
+
     return metadata
 
+
 def generate_banking_metadata_mt(data):
-    # Add the DataFrame to the dictionary
+    # Add DataFrame to a dictionary
     datasets = {}
     datasets['d1'] = data
+
     # Generate metadata from input
     metadata = MultiTableMetadata()
     metadata.detect_table_from_dataframe(
         table_name='d1',
-        data=data
+        data=datasets['d1']
     )
+
     # Correct id type
     metadata.update_column(
         table_name='d1',
@@ -146,6 +154,18 @@ def generate_banking_metadata_mt(data):
         sdtype='id',
         regex_format=r'\d{21}'
     )
+    metadata.update_column(
+        table_name='d1',
+        column_name='Account_Number',
+        sdtype='id',
+        regex_format=r'\d{10}'
+    )
+    metadata.update_column(
+        table_name='d1',
+        column_name='SSN',
+        sdtype='id',
+    )
+
     # Primary Keys: These keys identify every row of the table. 
     # They must be unique to the entire table and other tables may refer to them.
     metadata.set_primary_key(
@@ -160,6 +180,7 @@ def generate_banking_metadata_mt(data):
         table_name='d1',
         column_names=['SSN']
     )
+
     # Personal Identifiable Information (PII)
     metadata.update_column(
         table_name='d1',
@@ -179,6 +200,7 @@ def generate_banking_metadata_mt(data):
         sdtype='phone_number',
         pii=True
     )
+
     # Correct metadata sd types
     metadata.update_column(
         table_name='d1',
@@ -206,7 +228,7 @@ def generate_banking_metadata_mt(data):
         column_name='Loan_Term',
         sdtype='categorical'
     )
-    # Return metadata
+
     return metadata
 
 # --------------------------------------------------------------------------- #
