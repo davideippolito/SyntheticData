@@ -2,8 +2,9 @@
 #                                   IMPORT                                    #
 # --------------------------------------------------------------------------- #
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 # --------------------------------------------------------------------------- #
@@ -46,7 +47,7 @@ def plot_dependency_region_balance(dataframes):
 
 def plot_dependency_employment_type_balance(dataframes, employment_types):
     # Create subplots
-    fig, axs = plt.subplots(len(employment_types), 1, figsize=(10, 6 * len(employment_types)), sharex=True)
+    fig, axs = plt.subplots(1, len(employment_types), figsize=(6 * len(employment_types), 6), sharey=True)
     # Iterate over the employment types
     for idx, employment_type in enumerate(employment_types):
         ax = axs[idx]
@@ -57,10 +58,9 @@ def plot_dependency_employment_type_balance(dataframes, employment_types):
             # Get balance values
             balance = filtered_data['Balance']
             # Plot balance with a different label for each DataFrame
-            ax.hist(balance, bins=30, alpha=0.5, label=f'DataFrame {i+1}')
+            sns.kdeplot(balance, ax=ax, label=f'DataFrame {i+1}')
         # Set labels and title for each subplot
         ax.set_xlabel('Balance')
-        ax.set_ylabel('Frequency')
         ax.set_title(f'{employment_type} / Balance')
         # Add legend to the last subplot
         if idx == len(employment_types) - 1:
@@ -68,6 +68,19 @@ def plot_dependency_employment_type_balance(dataframes, employment_types):
     # Adjust the spacing between subplots
     plt.tight_layout()
     # Show the plot
+    plt.show()
+
+
+def plot_kernel_density(dataframes, variable):
+    plt.figure(figsize=(10, 6))
+    
+    for i, dataframe in enumerate(dataframes):
+        sns.kdeplot(dataframe[variable], label=f"DataFrame {i+1}")
+    
+    plt.title("Kernel Density Plot - " + variable)
+    plt.xlabel(variable)
+    plt.ylabel("Density")
+    plt.legend()
     plt.show()
 
 # --------------------------------------------------------------------------- #

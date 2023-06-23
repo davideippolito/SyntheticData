@@ -11,10 +11,8 @@ from sdv.single_table import CTGANSynthesizer
 def CTGAN(RD, metadata_st):
     synthesizer = CTGANSynthesizer(
         metadata_st,
-        # enforce_min_max_values=False,
-        # enforce_rounding=True,
-        epochs=100,
-        # verbose=True
+        epochs=10,
+        verbose=True
     )
     
     #Initialize the SDV model and fit it to the DataFrame:
